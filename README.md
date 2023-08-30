@@ -1,9 +1,12 @@
 # Poem-Generator
 
+Text preprocessing - 
 First, the poems are imported from text files and converted into a flat list. 
 The class shown below encapsulates the tokenization functionality provided by a Transformers tokenizer. The encodes() method tokenizes input data and converts it into token IDs, while the decodes() method converts token IDs back into a human-readable string.
 We then create a transformed list (tls) using the TfmdLists class, applying the TransformersTokenizer transformation to each element in the all_ballads list. 
 The HuggingFace model returns a tuple in outputs, with the actual predictions and some additional activations. To work inside the fastai training loop, we will need to drop those using a Callback: we use those to alter the behavior of the training loop.
+
+Model Definition and training -
 The “Learner”, i.e., the model, is then defined as follows
 learn = Learner(dls, model, loss_func=CrossEntropyLossFlat(), cbs=[DropOutput], metrics=Perplexity()).to_fp16()
 
@@ -11,6 +14,7 @@ The lr_find() method of the the fastai library is used to find an appropriate le
 learn.fit_one_cycle(10, 1e-4)
 
 After training the model for 10 epochs, we arrive at a perplexity of 19.9109. 
+
 Results
 The caption generated is fed as a “prompt”, i.e., an input to the GPT-2 model trained on poetic text.
 prompt = caption 
